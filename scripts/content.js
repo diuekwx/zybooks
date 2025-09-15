@@ -1,6 +1,3 @@
-
-
-
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.action === "start") {
         const startbuttons = document.querySelectorAll('button span').forEach(btn => {
@@ -9,6 +6,14 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             }
         });
         chrome.runtime.sendMessage({status: "done with start buttons"});
+        
+    }
+})
+
+// grp in one function laterlol
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.action === "startCounting"){
+        let num = 0;
         
     }
 })
