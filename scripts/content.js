@@ -1,4 +1,7 @@
+console.log("Content script loaded");
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    console.log("hello")
     if (msg.action === "start") {
         const startbuttons = document.querySelectorAll('button span').forEach(btn => {
             if (btn.innerText.includes('Start')){
@@ -12,20 +15,23 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 // grp in one function laterlol
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    const divMap = [];
     if (msg.action === "startCounting"){
-        let num = 0;
-        
+        console.log("did u get this ");
+        const div = document.querySelectorAll('.animation-controls.m-0'); // .m-0
+        if (div){
+            console.log("found something");
+        }
+        for (let i = 0; i < div.length; i++){
+            const buttonCount = div[i].querySelectorAll('button').length;
+            divMap.push({
+                divIndex: i,
+                buttonCount: buttonCount - 2 // theres the restart button and play dc abt those 
+            })
+        }
     }
+    console.log("counted");
+    chrome.runtime.sendMessage({status: "countAmts", map: divMap});
 })
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    if (msg.action === "play") {
-        const playbutton = document.querySelectorAll('button span').forEach(btn => {
-            if (btn.innerText.includes('Play')){
-                btn.click();
-            }
-        });
-        chrome.runtime.sendMessage({status: "clciked play buttons"});
-        
-    }
-})
+
