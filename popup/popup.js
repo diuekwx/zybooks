@@ -1,3 +1,5 @@
+
+
 document.getElementById('activation').addEventListener("click", () => {
-    chrome.runtime.sendmessage({action: "start"})
+    chrome.runtime.sendMessage({action: "start"})
 });

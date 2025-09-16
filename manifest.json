@@ -1,9 +1,23 @@
 {
-    "name": "zybooks filla",
-    "description": "press dat dam play button",
-    "version": "1.0",
-    "manifest_version": 3,
-    "action": {
-      "default_popup": "popup/index.html"
+  "name": "zybooks filla",
+  "description": "press dat dam play button",
+  "version": "1.0",
+  "manifest_version": 3,
+
+  "action": {
+    "default_popup": "popup/index.html"
+  },
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["scripts/content.js"]
     }
-  }
+  ],
+
+  "permissions": ["tabs", "scripting"]
+}
