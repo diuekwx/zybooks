@@ -35,33 +35,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 })
 
 
-// function clickNextPlayButton(div, sequenceCount) {
-//     if (sequenceCount <= 0) {
-//         // chrome.runtime.sendMessage({status: "done"});
-//         return;
-//     }
-//     const playBtn = div.querySelector('button[aria-label="Play"]');
-//     console.log(playBtn);
-//     if (playBtn) {
-//         playBtn.click();
-//         // Wait for the play button to disappear (animation running)
-//         const observer = new MutationObserver(() => {
-//             if (!div.querySelector('button[aria-label="Play"]')) {
-//                 observer.disconnect();
-//                 // Wait for play button to reappear (next sequence)
-//                 const reappearObserver = new MutationObserver(() => {
-//                     if (div.querySelector('button[aria-label="Play"]')) {
-//                         reappearObserver.disconnect();
-//                         clickNextPlayButton(sequenceCount - 1);
-//                     }
-//                 });
-//                 reappearObserver.observe(div.body, {childList: true, subtree: true});
-//             }
-//         });
-//         observer.observe(div.body, {childList: true, subtree: true});
-//     }
-// }
-
 function clickNextPlayButton(div, sequenceCount) {
     if (sequenceCount <= 0) {
         console.log("done");
@@ -81,7 +54,6 @@ function clickNextPlayButton(div, sequenceCount) {
         const btn = div.querySelector('.zb-button.grey.normalize-controls');
 
         if (btn) {
-            // Check its state by innerText or another attribute
             const state = btn.getAttribute("aria-label") || btn.innerText;
             console.log("Button state:", state);
 
