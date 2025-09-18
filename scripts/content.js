@@ -26,12 +26,90 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             const buttonCount = div[i].querySelectorAll('button').length;
             divMap.push({
                 divIndex: i,
-                buttonCount: buttonCount - 2 // theres the restart button and play dc abt those 
+                buttonCount: buttonCount - 1 // theres the restart button and play dc abt that 
             })
         }
+        chrome.runtime.sendMessage({status: "countAmts", map: divMap});
     }
-    console.log("counted");
-    chrome.runtime.sendMessage({status: "countAmts", map: divMap});
+
 })
 
 
+// function clickNextPlayButton(div, sequenceCount) {
+//     if (sequenceCount <= 0) {
+//         // chrome.runtime.sendMessage({status: "done"});
+//         return;
+//     }
+//     const playBtn = div.querySelector('button[aria-label="Play"]');
+//     console.log(playBtn);
+//     if (playBtn) {
+//         playBtn.click();
+//         // Wait for the play button to disappear (animation running)
+//         const observer = new MutationObserver(() => {
+//             if (!div.querySelector('button[aria-label="Play"]')) {
+//                 observer.disconnect();
+//                 // Wait for play button to reappear (next sequence)
+//                 const reappearObserver = new MutationObserver(() => {
+//                     if (div.querySelector('button[aria-label="Play"]')) {
+//                         reappearObserver.disconnect();
+//                         clickNextPlayButton(sequenceCount - 1);
+//                     }
+//                 });
+//                 reappearObserver.observe(div.body, {childList: true, subtree: true});
+//             }
+//         });
+//         observer.observe(div.body, {childList: true, subtree: true});
+//     }
+// }
+
+function clickNextPlayButton(div, sequenceCount) {
+    if (sequenceCount <= 0) {
+        console.log("done");
+        return;
+    }
+
+
+    const playBtn = div.querySelector('.zb-button.grey.normalize-controls');
+    if (!playBtn) {
+        console.log("No button found");
+        return;
+    }
+
+    console.log("Clicking Play");
+    playBtn.click();
+    const observer = new MutationObserver(() => {
+        const btn = div.querySelector('.zb-button.grey.normalize-controls');
+
+        if (btn) {
+            // Check its state by innerText or another attribute
+            const state = btn.getAttribute("aria-label") || btn.innerText;
+            console.log("Button state:", state);
+
+            if (state.includes("Play")) {
+                observer.disconnect();
+                console.log("Animation done, moving to next");
+                clickNextPlayButton(div, sequenceCount - 1);
+            }
+        }
+    });
+
+    observer.observe(div, {childList: true, subtree: true, attributes: true, characterData: true});
+}
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    // msg = action and divs 
+    console.log("playing");
+    if (msg.action === "play") {
+        console.log(msg.divs);
+        msg.divs.forEach((divData, i) => {
+            const div = document.querySelectorAll('.animation-controls.m-0')[divData.divIndex];
+            if (div){
+                console.log(div);
+                console.log(divData.buttonCount);
+                clickNextPlayButton(div, divData.buttonCount);
+            }
+        })
+
+        chrome.runtime.sendMessage({status: "clicked play buttons"});
+    }
+})

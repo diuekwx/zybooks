@@ -30,9 +30,43 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         (tabs) => {
             if (tabs[0]){
                 chrome.tabs.sendMessage(tabs[0].id, 
-                    {action: "startCounting"
-                    });
+                    {action: "startCounting"});
             }
         });
     }
 })
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    console.log("done w counts");
+    if (msg.status === "countAmts") {
+        console.log(msg.map);
+        chrome.tabs.query({
+            active: true,
+            currentWindow: true
+        },
+        (tabs) => {
+            if (tabs[0]) {
+                chrome.tabs.sendMessage(tabs[0].id, 
+                    {action: "play",
+                        divs: msg.map
+                    });
+            }
+        });
+    };
+});
+
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.status === "clicked play buttons") {
+        // chrome.tabs.query({
+        //     active: true,
+        //     currentWindow: true
+        // },
+        // (tabs) => {
+        //     if (tabs[0]) {
+        //         chrome.tabs.sendMessage(tabs[0].id, {action: "play"});
+        //     }
+        // });
+        console.log("done");
+    };
+});
