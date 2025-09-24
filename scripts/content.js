@@ -18,7 +18,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     const divMap = [];
     if (msg.action === "startCounting"){
         console.log("did u get this ");
-        const div = document.querySelectorAll('.animation-controls.m-0'); // .m-0
+        const div = document.querySelectorAll('.animation-controls'); // .m-0
         if (div){
             console.log("found something");
         }
@@ -74,7 +74,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.action === "play") {
         console.log(msg.divs);
         msg.divs.forEach((divData, i) => {
-            const div = document.querySelectorAll('.animation-controls.m-0')[divData.divIndex];
+            const div = document.querySelectorAll('.animation-controls')[divData.divIndex];
             if (div){
                 console.log(div);
                 console.log(divData.buttonCount);
